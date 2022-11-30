@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 class HelloWorldController {
     private val log = LoggerFactory.getLogger(HelloWorldController::class.java)
 
+
+
+
+
     @GetMapping("/hello")
     fun hello() : String {
         log.warn("get yo there!")
