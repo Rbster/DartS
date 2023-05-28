@@ -1,2 +1,4 @@
-# middle-longread (Andrey)
-flask --app app run -p 5000 
+# front (Tolgudur + Diana + Roma)
+
+npm install --global yarn
+yarn vite
