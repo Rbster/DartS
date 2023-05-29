@@ -45,12 +45,11 @@ const router = createBrowserRouter([
       {
         path: "/longreads/:longreadId",
         element: <LongreadPage />,
-        children: [
-          {
-            path: "/longreads/:longreadId/:chapterId",
-            element: <ChapterPage />,
-          }
-        ],
+        
+      },
+      {
+        path: "/longreads/:longreadId/:chapterId",
+        element: <ChapterPage />,
       },
       {
         path: "/worlds/:worldId",
