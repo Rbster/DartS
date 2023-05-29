@@ -1,9 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import LongreadCard from "../components/LongreadCard";
+import axios from 'axios';
+
 
 export default function Longreads() {
+  // useState переменные
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [longreads, setLongreads] = useState([]);
+
+  // GET запрос на сервер для получения списка лонгридов
+  useEffect(() => {
+    axios.get('http://127.0.0.1:5000/api/explore/')
+        // Действия которые будут выполнены при успешном выполнении запроса
+        .then(response => {
+            // Отображение загрузки прекратится
+            setLoading(false);
+            // Список лонгридов будет записан в переменную longreads
+            setLongreads(response.data);
+        })
+        // Обработка ошибки
+        .catch(error => {
+            setLoading(false);
+            console.error('Error fetching longreads:', error);
+            setError('Error fetching longreads' + error.message);
+        }); }
+    , []
+  );
+
+  console.log(longreads)
+
+  if (loading) {
+      return <p>Loading...</p>;
+  }
+
+  if (error) {
+      return <p>{error}</p>;
+  }
+
   return (
     <div id="longreads">
       <Container>
@@ -24,12 +60,12 @@ export default function Longreads() {
               </Card.ImgOverlay>
             </Card>
           </Col>
-          {Array.from({ length: 5}).map((_, idx) => (
-            <Col>
+          {longreads.map((longread, idx) => (
+            <Col key={idx}>
               <LongreadCard
-                title="Fantastic Beasts and Where to Find Them"
-                desc="Fantastic Beasts and Where to Find Them is a 2001 guide book written by British author J. K. Rowling about the magical creatures in the Harry Potter universe."
-                img="../assets/fb.webp"
+                title={longread.name}
+                desc={longread.description}
+                img={longread.img_link}
               />
             </Col>
           ))}
