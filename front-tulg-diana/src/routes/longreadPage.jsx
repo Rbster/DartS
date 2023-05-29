@@ -7,8 +7,12 @@ import styled from "styled-components";
 import { Breadcrumb } from "react-bootstrap";
 import WorldObjects from "../components/WorldObjects";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useLocation } from "react-router-dom";
 
 export default function LongreadPage() {
+    const location = useLocation();
+    const longreadData = location.state.longreadData
+    console.log(longreadData.title)
     return (
         <div id="longread">
             <Container>
@@ -18,7 +22,7 @@ export default function LongreadPage() {
                     }}
                 >
                     <StyledBreadcrumb href="/explore/longreads">Longreads</StyledBreadcrumb>
-                    <StyledBreadcrumb active>Fantastic Beasts and Where to Find Them</StyledBreadcrumb>
+                    <StyledBreadcrumb active>{longreadData.title}</StyledBreadcrumb>
                 </Breadcrumb>
                 <Row xs={6} sm={2} md={2} lg={3} xl={4} className="g-4">
                     <Col xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -29,7 +33,7 @@ export default function LongreadPage() {
                                 height: "300px",
                             }}
                         >
-                            <StyledImage src="../assets/beasts.jpg" />
+                            <StyledImage src={longreadData.img} />
                             <Card.ImgOverlay
                                 style={{
                                     display: "flex",
@@ -43,10 +47,10 @@ export default function LongreadPage() {
                                         color: "white",
                                     }}
                                 >
-                                    Fantastic Beasts and Where to Find Them
+                                    {longreadData.title}
                                 </Card.Title>
                                 <Card.Text>
-                                    Fantastic Beasts and Where to Find Them is a book written by J. K. Rowling about the magical creatures in the Harry Potter universe
+                                    {longreadData.desc}
                                 </Card.Text>
                             </Card.ImgOverlay>
                         </Card>

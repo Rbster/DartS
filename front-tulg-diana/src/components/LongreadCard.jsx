@@ -10,7 +10,11 @@ export default function LongreadCard(props) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/longreads/${props.id}`);
+        navigate(`/longreads/${props.longreadId}`, {
+          state: {
+            longreadData: props,
+          }
+        });
     };
 
     return (
@@ -20,7 +24,7 @@ export default function LongreadCard(props) {
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
       }}
     >
-      <Row noGutters>
+      <Row gutters={0}>
         <Col
           md={5}
           style={{

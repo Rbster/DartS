@@ -62,7 +62,7 @@ export default function Longreads() {
           </Col>
           {longreads.map((longread, idx) => (
             <Col key={idx}>
-              <LongreadCard
+              <LongreadCard longreadId={longread.id}
                 title={longread.name}
                 desc={longread.description}
                 img={longread.img_link}
