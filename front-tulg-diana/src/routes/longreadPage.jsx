@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -8,11 +8,51 @@ import { Breadcrumb } from "react-bootstrap";
 import WorldObjects from "../components/WorldObjects";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useLocation } from "react-router-dom";
+import ChapterCard from "../components/ChapterCard";
+import axios from 'axios';
+
 
 export default function LongreadPage() {
     const location = useLocation();
-    const longreadData = location.state.longreadData
-    console.log(longreadData.title)
+    const longreadData = location.state.longreadData    
+    // download chapters Id and names 
+    // transfer longreadData along +
+
+    // useState переменные
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [chaptersHolder, setChapters] = useState([]);
+
+    // GET запрос на сервер для получения списка лонгридов
+    useEffect(() => {
+        axios.get(`http://127.0.0.1:5000/api/longreads/${longreadData.longreadId}`)
+            // Действия которые будут выполнены при успешном выполнении запроса
+            .then(response => {
+                // Отображение загрузки прекратится
+                setLoading(false);
+                // Список лонгридов будет записан в переменную longreads
+                setChapters(response.data);
+            })
+            // Обработка ошибки
+            .catch(error => {
+                setLoading(false);
+                console.error('Error fetching longreads:', error);
+                setError('Error fetching longreads' + error.message);
+            });
+    }, []);
+
+    console.log(chaptersHolder)
+
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
+
+    // const chapters = ["123"]
     return (
         <div id="longread">
             <Container>
@@ -73,17 +113,20 @@ export default function LongreadPage() {
                                 flexGrow: 1,
                             }}
                         >
-                            <h3>Longread</h3>
+                            <h3>Chapters</h3>
                             <ListGroup>
-                                <ListGroup.Item>
-                                    <p>Fantastic Beasts and Where to Find Them (often referred to as simply Fantastic Beasts) is a 2001 guide book written by British author J. K. Rowling (under the pen name of the fictitious author Newt Scamander) about the magical creatures in the Harry Potter universe. The original version, illustrated by the author herself, purports to be Harry Potter's copy of the textbook of the same name mentioned in Harry Potter and the Philosopher's Stone (or Harry Potter and the Sorcerer's Stone in the US), the first novel of the Harry Potter series. It includes several notes inside it supposedly handwritten by Harry, Ron Weasley, and Hermione Granger, detailing their own experiences with some of the beasts described, and including inside jokes relating to the original series.</p>
-                                    <p>In a 2001 interview with publisher Scholastic, Rowling stated that she chose the subject of magical creatures because it was a fun topic for which she had already developed much information in earlier books. Rowling's name did not appear on the cover of the first edition, the work being credited under the pen name "Newt Scamander", who, in the books, wrote this textbook as seen on Harry's supply list for his first year.</p>
-                                    <p>The book benefits the BBC affiliated charity Comic Relief. Over 80% of the cover price of each book sold goes directly to poor children in various places around the world. According to Comic Relief, sales from this book and its companion Quidditch Through the Ages had raised over £17 million by July 2009.</p>
-                                    <p>The book benefits the BBC affiliated charity Comic Relief. Over 80% of the cover price of each book sold goes directly to poor children in various places around the world. According to Comic Relief, sales from this book and its companion Quidditch Through the Ages had raised over £17 million by July 2009. The book benefits the BBC affiliated charity Comic Relief. Over 80% of the cover price of each book sold goes directly to poor children in various places around the world. According to Comic Relief, sales from this book and its companion Quidditch Through the Ages had raised over £17 million by July 2009. The film was released on 18 November 2016.</p>
-                                    <p>On 14 March 2017 a new edition of the book, with cover illustrations by Jonny Duddle and interior illustrations by Tomislav Tomic, was published with six new creatures and a foreword by Newt Scamander. It is assumed to be a new copy as it does not feature any handwritten notes. Proceeds from this edition are donated to Lumos as well as Comic Relief.</p>
-                                    <p>On 7 November 2017 a new edition was published with illustrations by Olivia Lomenech Gill, featuring the aforementioned 2017 text. On 1 February 2018 a Kindle in Motion edition, featuring these illustrations with movement, was released for compatible devices.</p>
-                                </ListGroup.Item>
+                                {chaptersHolder.chapters.map((chapter, idx) => (
+                                    <ListGroup.Item key = {idx}>
+                                        <ChapterCard 
+                                            longreadData={longreadData}
+                                            chapterData={chapter}
+                                            chapterIdx={idx}
+                                        />
+                                    </ListGroup.Item>
+                                ))}
                             </ListGroup>
+
+                            
                         </div>
                     </div>
                 </Row>

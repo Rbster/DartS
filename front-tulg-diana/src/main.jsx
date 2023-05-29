@@ -12,6 +12,7 @@ import Worlds from "./routes/worlds";
 import WorldPage from "./routes/worldPage";
 import TimelinePage from "./routes/timelinePage";
 import LongreadPage from "./routes/longreadPage.jsx";
+import ChapterPage from "./routes/chapterPage";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/longreads/:longreadId",
-        element: <LongreadPage />
+        element: <LongreadPage />,
+        children: [
+          {
+            path: "/longreads/:longreadId/:chapterId",
+            element: <ChapterPage />,
+          }
+        ],
       },
       {
         path: "/worlds/:worldId",
