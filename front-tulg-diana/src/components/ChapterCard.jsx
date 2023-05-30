@@ -14,7 +14,7 @@ export default function ChapterCard(props) {
 
 
     const handleClick = () => {
-        console.log("clicked !")
+        console.log("clicked")
         navigate(`/longreads/${longreadData.longreadId}/${chapterData.id}`, {
           state: {
             longreadData: longreadData,
