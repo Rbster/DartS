@@ -2,11 +2,13 @@ package ru.darts.storyline.conroller
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.*
+import org.springframework.web.bind.annotation.*
 import ru.darts.storyline.integration.DbAdapter
+import java.lang.Exception
 
 @RestController
+@RequestMapping("/api")
 class HelloWorldController {
     @Autowired
     lateinit var dbAdapter: DbAdapter
@@ -17,5 +19,17 @@ class HelloWorldController {
     fun hello() : String {
         log.warn("get yo there!")
         return "hella hi!"
+    }
+
+    @GetMapping("/events/{longreadId}")
+    fun events(@PathVariable longreadId: Long) : ResponseEntity<String> {
+        log.debug("Controller.events of longreadId = $longreadId")
+        val responseHeaders = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+        return try {
+            val result = dbAdapter.getLongreadEvents(longreadId)
+            ResponseEntity<String>(result, responseHeaders, HttpStatus.OK)
+        } catch (_: Exception) {
+            ResponseEntity<String>(HttpStatus.NOT_FOUND)
+        }
     }
 }

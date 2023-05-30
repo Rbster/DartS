@@ -8,50 +8,51 @@ import { Breadcrumb } from "react-bootstrap";
 import BlockContentCard from "../components/BlockContentCard";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useLocation } from "react-router-dom";
-import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import Api from "../helper/Api"
+import ApiTimeline from "../helper/ApiTimeline"
 
+import axios from 'axios';
 
 export default function ChapterPage() {
-    // useState переменные
-
-    
-    
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [blockContentsHolder, setBlockContentsHolder] = useState([]);
-
+    
+    const navigate = useNavigate();
     const location = useLocation();
     const longreadData = location.state.longreadData
     const chapterData = location.state.chapterData
     const toLongreadPage = () => {
-                navigate(`/longreads/${longreadData.longreadId}`, {
-                state: {
-                    longreadData: longreadData,
-                }
-                });
+        navigate(`/longreads/${longreadData.longreadId}`, {
+            state: {
+                longreadData: longreadData,
+            }
+        });
     };
 
-    console.log("before blockCs taking")
-    // GET запрос на сервер для получения списка лонгридов
+    const api = new Api();
+    const apiTimeline = new ApiTimeline();
+
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5000/api/chapter/${chapterData.id}`)
-            // Действия которые будут выполнены при успешном выполнении запроса
+        api.getContentBlockData(chapterData.id)
             .then(response => {
-                // Отображение загрузки прекратится
                 setLoading(false);
-                // Список лонгридов будет записан в переменную longreads
                 setBlockContentsHolder(response.data);
             })
-            // Обработка ошибки
             .catch(error => {
                 setLoading(false);
-                console.error('Error fetching longreads:', error);
-                setError('Error fetching longreads' + error.message);
+                setError('Error fetching longreads' + error);
+            });
+
+        apiTimeline.getLongreadEvents(longreadData.longreadId)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error);
             });
     }, []);
-    
 
     if (loading) {
         return <p>Loading...</p>;
@@ -61,7 +62,6 @@ export default function ChapterPage() {
         return <p>{error}</p>;
     }
 
-    console.log(blockContentsHolder)
     return (
         <div id="longread">
             <Container>

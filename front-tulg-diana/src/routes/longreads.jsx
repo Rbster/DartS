@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import LongreadCard from "../components/LongreadCard";
-import axios from 'axios';
+import Api from "../helper/Api"
 
 
 export default function Longreads() {
@@ -12,25 +12,21 @@ export default function Longreads() {
   const [longreads, setLongreads] = useState([]);
 
   // GET запрос на сервер для получения списка лонгридов
+  const api = new Api();
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/explore/')
-        // Действия которые будут выполнены при успешном выполнении запроса
+    api.getLongreadsList()
         .then(response => {
             // Отображение загрузки прекратится
             setLoading(false);
             // Список лонгридов будет записан в переменную longreads
             setLongreads(response.data);
         })
-        // Обработка ошибки
         .catch(error => {
             setLoading(false);
-            console.error('Error fetching longreads:', error);
-            setError('Error fetching longreads' + error.message);
+            setError('Error fetching longreads' + error);
         }); }
     , []
   );
-
-  console.log(longreads)
 
   if (loading) {
       return <p>Loading...</p>;

@@ -6,3 +6,9 @@ The project dedicated to the development of fantasy/sci-fi platform for designer
   docker build ./storyline --tag storyline
   run -p 8080:8080 storyline
 ```
+## timeline component:
+### for dev purposes
+from timeline directory run:
+```
+./gradlew bootRun --args='--server.port=50505'
+```

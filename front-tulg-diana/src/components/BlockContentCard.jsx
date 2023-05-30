@@ -10,7 +10,6 @@ import Popover from 'react-bootstrap/Popover';
 
 export default function BlockContentCard(props) {
     const navigate = useNavigate();
-    console.log(props.longreadData.longreadId)
     const longreadData = props.longreadData
     const chapterData = props.chapterData
     const blockData = props.blockData

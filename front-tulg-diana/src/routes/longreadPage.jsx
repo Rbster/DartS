@@ -9,8 +9,7 @@ import WorldObjects from "../components/WorldObjects";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useLocation } from "react-router-dom";
 import ChapterCard from "../components/ChapterCard";
-import axios from 'axios';
-
+import Api from "../helper/Api"
 
 export default function LongreadPage() {
     const location = useLocation();
@@ -24,8 +23,9 @@ export default function LongreadPage() {
     const [chaptersHolder, setChapters] = useState([]);
 
     // GET запрос на сервер для получения списка лонгридов
+    const api = new Api();
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5000/api/longreads/${longreadData.longreadId}`)
+        api.getLongreadData(longreadData.longreadId)
             // Действия которые будут выполнены при успешном выполнении запроса
             .then(response => {
                 // Отображение загрузки прекратится
