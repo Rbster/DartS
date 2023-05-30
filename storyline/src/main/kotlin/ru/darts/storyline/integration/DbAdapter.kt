@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.stereotype.Service
+import ru.darts.storyline.EventData
 import ru.darts.storyline.UniversalTimelineRq
 
 
@@ -39,6 +40,12 @@ class DbAdapter(restTemplateBuilder: RestTemplateBuilder) {
         val rq = UniversalTimelineRq(blockContentId, xCoordinate, yCoordinate, time, floatingText, null)
         sendRequest(baseUrl + relativeUrl, rq, String::class.java)
     }
+
+    fun updateEventOfBlockContent(blockContentId: Long, eventData: EventData) = updateEventOfBlockContent(blockContentId,
+            checkNotNull(eventData.xCoordinate),
+            checkNotNull(eventData.yCoordinate),
+            checkNotNull(eventData.time),
+            checkNotNull(eventData.floatingText))
 
     fun deleteEventOfBlockContent(blockContentId: Long) {
         val relativeUrl = "/longread/blockcontent/event/delete"

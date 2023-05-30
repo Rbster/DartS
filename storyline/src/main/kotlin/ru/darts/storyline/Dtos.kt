@@ -14,3 +14,12 @@ data class UniversalTimelineRq(
     @JsonProperty("floating_text") var floatingText: String?,
     @JsonProperty("longread_id") var longreadId: Long?
 )
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+data class  EventData(
+    @JsonProperty("coordx") var xCoordinate: Long?,
+    @JsonProperty("coordy") var yCoordinate: Long?,
+    var time: Long?,
+    @JsonProperty("floating_text") var floatingText: String?
+)
