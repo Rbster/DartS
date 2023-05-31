@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { useEffect, useState }  from "react";
+import { useForm, Controller } from "react-hook-form";
 
 export default function BlockContentCard(props) {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function BlockContentCard(props) {
     const onDeleteClicked = () => props.onDeleteClicked(blockData.id)
 
     const [eventData, setEventData] = useState({})
-
+  
     const isNotNull = (obj) => obj !== undefined && obj !== null
     
     const [deleteVisible, setDeleteVisible] = useState( blockData.floating_text !== undefined && blockData.floating_text  !== null)
@@ -25,8 +26,20 @@ export default function BlockContentCard(props) {
         setDeleteVisible(isNotNull(blockData.floating_text))
         console.log(`visability of button ${blockData.id} delete = ${deleteVisible}`)
         console.log(`visability of button ${blockData.id} delete = ${isNotNull(blockData.floating_text)}`)
-    }, [props.blockData]);
+    }, [props.blockData.floating_text]);
 
+
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onSubmit = (data) => {
+    props.onEditClicked(blockData.id, {
+      "coordx": parseInt(data.coordx, 10),
+      "coordy": parseInt(data.coordy, 10),
+      "time": parseInt(data.time, 10),
+      "floating_text": `${data.floating_text}`
+    })
+    console.log(data)
+  }
 
     // const handleClick = () => {
     //     console.log("clicked !")
@@ -96,15 +109,26 @@ export default function BlockContentCard(props) {
 
             <OverlayTrigger
               trigger="click"
+              flip={false}
               overlay={<Popover>
                 <Popover.Body>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    {/* register your input into the hook by invoking the "register" function */}
                   
-                  <StyledButtonActive  variant="secondary"> { deleteVisible ? "Edit event" : "Add event" }</StyledButtonActive>
+                    <input type="number" {...register("coordx",  { pattern: /^[0-9]+$/i })} />
+                    <input type="number" {...register("coordy", { pattern: /^[0-9]+$/i })} />
+                    <input type="number" {...register("time", { pattern: /^[0-9]*$/i })} />
+                    <input {...register("floating_text", { pattern: /^.+$/i, min: 1})} />
+                  
+                    <StyledButtonActive type="submit"> { deleteVisible ? "Edit event" : "Add event" } </StyledButtonActive>
+                  </form>
                 </Popover.Body>
               </Popover>}   
             >
               <StyledButtonActive  variant="secondary"> { deleteVisible ? "Edit event" : "Add event" }</StyledButtonActive>
             </OverlayTrigger>
+
+            
 
 
             {deleteVisible && <StyledButtonActive onClick={onDeleteClicked}>DeleteEvent</StyledButtonActive>}

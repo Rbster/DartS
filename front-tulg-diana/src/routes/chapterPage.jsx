@@ -36,6 +36,8 @@ export default function ChapterPage() {
     const apiTimeline = new ApiTimeline();
 
     const [deleteClicked, setDeleteClicked] = useState(false);
+    const [editClicked, setEditClicked] = useState(false);
+
     
     useEffect(() => { 
         api.getContentBlockData(chapterData.id)
@@ -48,7 +50,7 @@ export default function ChapterPage() {
                 setError('Error fetching longreads' + error);
             });
         console.log('blockContents updated')
-    }, [deleteClicked]);
+    }, [deleteClicked, editClicked]);
 
 // Use side-effect may be bad!!
     const onDeleteClicked = (blockContentId) => {
@@ -56,6 +58,14 @@ export default function ChapterPage() {
         apiTimeline.deleteEvent(blockContentId)
             .then(() => {
                 setDeleteClicked(!deleteClicked)
+            })
+    }
+
+    const onEditClicked = (blockContentId, eventData) => {
+        console.log(`edit with blockContentId = ${blockContentId}, eventData = ${eventData} `)
+        apiTimeline.editEvent(blockContentId, eventData)
+            .then(() => {
+                setDeleteClicked(!editClicked)
             })
     }
 
@@ -138,6 +148,7 @@ export default function ChapterPage() {
                                             blockData={blockContent}
                                             blockIdx={idx}
                                             onDeleteClicked ={onDeleteClicked}
+                                            onEditClicked={onEditClicked}
                                         />
                                     </Row>
                                 ))}
