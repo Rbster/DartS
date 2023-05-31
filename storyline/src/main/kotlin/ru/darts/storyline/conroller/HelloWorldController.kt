@@ -34,15 +34,25 @@ class HelloWorldController {
         }
     }
 
-    @PostMapping("/event/edit/{longreadId}")
-    fun editEvent(@PathVariable longreadId: Long, @RequestBody eventData: EventData) = try {
-            log.debug("Controller.events of longreadId = $longreadId")
-            dbAdapter.updateEventOfBlockContent(longreadId, eventData)
+    @PostMapping("/event/edit/{blockContentId}")
+    fun editEvent(@PathVariable blockContentId: Long, @RequestBody eventData: EventData) = try {
+            log.debug("Controller.events of blockContentId = $blockContentId")
+            dbAdapter.updateEventOfBlockContent(blockContentId, eventData)
             ResponseEntity<String>(HttpStatus.CREATED)
         } catch (_: IllegalStateException) {
             ResponseEntity<String>(HttpStatus.BAD_REQUEST)
         } catch (_: Exception) {
             ResponseEntity<String>(HttpStatus.NOT_FOUND)
         }
-    
+
+    @DeleteMapping("/event/delete/{blockContentId}")
+    fun deleteEvent(@PathVariable blockContentId: Long) = try {
+            log.debug("Controller.events of blockContentId = $blockContentId")
+            dbAdapter.deleteEventOfBlockContent(blockContentId)
+            ResponseEntity<String>(HttpStatus.NO_CONTENT)
+        } catch (_: IllegalStateException) {
+            ResponseEntity<String>(HttpStatus.BAD_REQUEST)
+        } catch (_: Exception) {
+            ResponseEntity<String>(HttpStatus.NOT_FOUND)
+        }
 }
