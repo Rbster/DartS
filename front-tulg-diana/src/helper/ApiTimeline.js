@@ -1,4 +1,5 @@
 import axios from 'axios';
+import BlockContentCard from '../components/BlockContentCard';
 
 export default class ApiTimeline {
     constructor() {
@@ -38,4 +39,12 @@ export default class ApiTimeline {
     getLongreadEvents = (longreadId) => {
         return this.init().get(`/api/events/${longreadId}`);
     };
+
+    editEvent = (blockContentId, eventData) => {
+      return this.init().post(`/api/event/edit/${blockContentId}`, eventData);
+    }
+
+    deleteEvent = (blockContentId) => {
+      return this.init().delete(`/api/event/delete/${blockContentId}`);
+    }
   }

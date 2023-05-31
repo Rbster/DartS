@@ -7,24 +7,33 @@ import Button from "react-bootstrap/Button";
 import {useNavigate} from "react-router-dom";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import { useEffect, useState }  from "react";
 
 export default function BlockContentCard(props) {
     const navigate = useNavigate();
     const longreadData = props.longreadData
     const chapterData = props.chapterData
     const blockData = props.blockData
+    const onDeleteClicked = () => props.onDeleteClicked(blockData.id)
+
+    const isNotNull = (obj) => obj !== undefined && obj !== null
+    
+    const [deleteVisible, setDeleteVisible] = useState( blockData.floating_text !== undefined && blockData.floating_text  !== null)
+    useEffect(() => {
+        setDeleteVisible(isNotNull(blockData.floating_text))
+        console.log(`visability of button ${blockData.id} delete = ${deleteVisible}`)
+    }, [props.blockData]);
 
 
-
-    const handleClick = () => {
-        console.log("clicked !")
-        navigate(`/longreads/${longreadData.longreadId}/${chapterData.id}`, {
-          state: {
-            longreadData: longreadData,
-            chapterData: chapterData
-          }
-        });
-    };
+    // const handleClick = () => {
+    //     console.log("clicked !")
+    //     navigate(`/longreads/${longreadData.longreadId}/${chapterData.id}`, {
+    //       state: {
+    //         longreadData: longreadData,
+    //         chapterData: chapterData
+    //       }
+    //     });
+    // };
 
     // const navigateToLongread = () => {
     //   console.log("clicked  navigateToLongread!")
@@ -80,10 +89,10 @@ export default function BlockContentCard(props) {
             border: "none",
             boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
           }}>
-            <StyledButtonActive onClick={handleClick}>Edit</StyledButtonActive>
-            <StyledButtonActive onClick={handleClick}>Delete</StyledButtonActive>
+            {/* <StyledButtonActive onClick={handleClick}>Edit</StyledButtonActive> */}
+            {deleteVisible && <StyledButtonActive onClick={onDeleteClicked}>DeleteEvent</StyledButtonActive>}
           {/* Here will be button to add event and to show Map */}
-            <OverlayTrigger
+            {/* <OverlayTrigger
               trigger="click"
               overlay={<Popover>
                 <Popover.Body>
@@ -92,10 +101,10 @@ export default function BlockContentCard(props) {
               </Popover>}   
             >
               <StyledButtonActive variant="secondary">Add event</StyledButtonActive>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
 
 
-            <OverlayTrigger
+            {/* <OverlayTrigger
               trigger="click"
               overlay={<Popover>
                 <Popover.Body>
@@ -104,7 +113,7 @@ export default function BlockContentCard(props) {
               </Popover>}   
             >
               <StyledButtonActive variant="secondary">Delete event</StyledButtonActive>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
 
           </Card>
           

@@ -18,6 +18,7 @@ export default function ChapterPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [blockContentsHolder, setBlockContentsHolder] = useState([]);
+
     
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,25 +35,31 @@ export default function ChapterPage() {
     const api = new Api();
     const apiTimeline = new ApiTimeline();
 
+    const [deleteClicked, setDeleteClicked] = useState(false);
+    const [deleteUpdater, setDeleteUpdater] = useState(false);
+    
+
+
     useEffect(() => {
         api.getContentBlockData(chapterData.id)
             .then(response => {
                 setLoading(false);
                 setBlockContentsHolder(response.data);
+                setDeleteUpdater(!deleteUpdater)
             })
             .catch(error => {
                 setLoading(false);
                 setError('Error fetching longreads' + error);
             });
+        console.log('blockContents updated')
+    }, [deleteClicked]);
 
-        apiTimeline.getLongreadEvents(longreadData.longreadId)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }, []);
+// Use side-effect may be bad!!
+    const onDeleteClicked = (blockContentId) => {
+        console.log(`delete clicked with blockContentId = ${blockContentId}`)
+        apiTimeline.deleteEvent(blockContentId)
+        setDeleteClicked(!deleteClicked)
+    }
 
     if (loading) {
         return <p>Loading...</p>;
@@ -132,6 +139,8 @@ export default function ChapterPage() {
                                             chapterData={chapterData}
                                             blockData={blockContent}
                                             blockIdx={idx}
+                                            onDeleteClicked ={onDeleteClicked}
+                                            deleteUpdater={deleteUpdater}
                                         />
                                     </Row>
                                 ))}

@@ -25,6 +25,8 @@ internal class DbAdapterIntegrationTest {
     @Test
     fun updateEventOfBlockContentTest() {
         print(dbAdapter.updateEventOfBlockContent(1, 4, 9, 123, "Something hapoend 1"))
+        print(dbAdapter.updateEventOfBlockContent(2, 4, 9, 123, "Something hapoend 1"))
+        print(dbAdapter.updateEventOfBlockContent(3, 4, 9, 123, "Something hapoend 1"))
     }
 
     @Test
