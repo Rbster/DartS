@@ -16,6 +16,8 @@ export default function BlockContentCard(props) {
     const blockData = props.blockData
     const onDeleteClicked = () => props.onDeleteClicked(blockData.id)
 
+    const [eventData, setEventData] = useState({})
+
     const isNotNull = (obj) => obj !== undefined && obj !== null
     
     const [deleteVisible, setDeleteVisible] = useState( blockData.floating_text !== undefined && blockData.floating_text  !== null)
@@ -90,19 +92,26 @@ export default function BlockContentCard(props) {
             border: "none",
             boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
           }}>
-            {/* <StyledButtonActive onClick={handleClick}>Edit</StyledButtonActive> */}
-            {deleteVisible && <StyledButtonActive onClick={onDeleteClicked}>DeleteEvent</StyledButtonActive>}
-          {/* Here will be button to add event and to show Map */}
-            {/* <OverlayTrigger
+            {/* <StyledButtonActive  variant="secondary"> { deleteVisible ? "Edit event" : "Add event" }</StyledButtonActive> */}
+
+            <OverlayTrigger
               trigger="click"
               overlay={<Popover>
                 <Popover.Body>
-                  Add Event Form
+                  
+                  <StyledButtonActive  variant="secondary"> { deleteVisible ? "Edit event" : "Add event" }</StyledButtonActive>
                 </Popover.Body>
               </Popover>}   
             >
-              <StyledButtonActive variant="secondary">Add event</StyledButtonActive>
-            </OverlayTrigger> */}
+              <StyledButtonActive  variant="secondary"> { deleteVisible ? "Edit event" : "Add event" }</StyledButtonActive>
+            </OverlayTrigger>
+
+
+            {deleteVisible && <StyledButtonActive onClick={onDeleteClicked}>DeleteEvent</StyledButtonActive>}
+            
+            
+          {/* Here will be button to add event and to show Map */}
+            
 
 
             {/* <OverlayTrigger
