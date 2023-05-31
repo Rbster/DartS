@@ -36,16 +36,12 @@ export default function ChapterPage() {
     const apiTimeline = new ApiTimeline();
 
     const [deleteClicked, setDeleteClicked] = useState(false);
-    const [deleteUpdater, setDeleteUpdater] = useState(false);
     
-
-
-    useEffect(() => {
+    useEffect(() => { 
         api.getContentBlockData(chapterData.id)
             .then(response => {
                 setLoading(false);
                 setBlockContentsHolder(response.data);
-                setDeleteUpdater(!deleteUpdater)
             })
             .catch(error => {
                 setLoading(false);
@@ -58,7 +54,9 @@ export default function ChapterPage() {
     const onDeleteClicked = (blockContentId) => {
         console.log(`delete clicked with blockContentId = ${blockContentId}`)
         apiTimeline.deleteEvent(blockContentId)
-        setDeleteClicked(!deleteClicked)
+            .then(() => {
+                setDeleteClicked(!deleteClicked)
+            })
     }
 
     if (loading) {
@@ -140,7 +138,6 @@ export default function ChapterPage() {
                                             blockData={blockContent}
                                             blockIdx={idx}
                                             onDeleteClicked ={onDeleteClicked}
-                                            deleteUpdater={deleteUpdater}
                                         />
                                     </Row>
                                 ))}

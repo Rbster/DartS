@@ -22,6 +22,7 @@ export default function BlockContentCard(props) {
     useEffect(() => {
         setDeleteVisible(isNotNull(blockData.floating_text))
         console.log(`visability of button ${blockData.id} delete = ${deleteVisible}`)
+        console.log(`visability of button ${blockData.id} delete = ${isNotNull(blockData.floating_text)}`)
     }, [props.blockData]);
 
 
