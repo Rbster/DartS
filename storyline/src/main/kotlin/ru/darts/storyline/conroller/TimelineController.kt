@@ -10,11 +10,11 @@ import java.lang.Exception
 
 @RestController
 @RequestMapping("/api")
-class HelloWorldController {
+class TimelineController {
     @Autowired
     lateinit var dbAdapter: DbAdapter
 
-    private val log = LoggerFactory.getLogger(HelloWorldController::class.java)
+    private val log = LoggerFactory.getLogger(TimelineController::class.java)
 
     @GetMapping("/hello")
     fun hello() : String {
@@ -34,9 +34,21 @@ class HelloWorldController {
         }
     }
 
+    @GetMapping("/event/{blockContentId}")
+    fun event(@PathVariable blockContentId: Long) : ResponseEntity<String> {
+        log.debug("Controller.event of blockContentId = $blockContentId")
+        val responseHeaders = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+        return try {
+            val result = dbAdapter.getEvent(blockContentId)
+            ResponseEntity<String>(result, responseHeaders, HttpStatus.OK)
+        } catch (_: Exception) {
+            ResponseEntity<String>(HttpStatus.NOT_FOUND)
+        }
+    }
+
     @PostMapping("/event/edit/{blockContentId}")
     fun editEvent(@PathVariable blockContentId: Long, @RequestBody eventData: EventData) = try {
-            log.debug("Controller.events of blockContentId = $blockContentId")
+            log.debug("Controller.editEvent of blockContentId = $blockContentId")
             dbAdapter.updateEventOfBlockContent(blockContentId, eventData)
             ResponseEntity<String>(HttpStatus.CREATED)
         } catch (_: IllegalStateException) {
@@ -47,7 +59,7 @@ class HelloWorldController {
 
     @DeleteMapping("/event/delete/{blockContentId}")
     fun deleteEvent(@PathVariable blockContentId: Long) = try {
-            log.debug("Controller.events of blockContentId = $blockContentId")
+            log.debug("Controller.deleteEvent of blockContentId = $blockContentId")
             dbAdapter.deleteEventOfBlockContent(blockContentId)
             ResponseEntity<String>(HttpStatus.NO_CONTENT)
         } catch (_: IllegalStateException) {
